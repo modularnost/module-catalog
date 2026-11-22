@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Modularnost module catalog v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "modules"],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "modules": { "type": "array", "items": { "$ref": "#/$defs/module" } }
+  },
+  "$defs": {
+    "text": { "type": "string", "pattern": "\\S" },
+    "https_url": { "type": "string", "format": "uri", "pattern": "^https://[^/?#\\s]+" },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"
+    },
+    "screenshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "alt"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^screenshots/[A-Za-z0-9][A-Za-z0-9_.-]*/[A-Za-z0-9][A-Za-z0-9_.-]*\\.(png|jpg|jpeg|webp)$"
+        },
+        "alt": { "$ref": "#/$defs/text" }
+      }
+    },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract"],
+      "properties": {
+        "contract": { "type": "integer", "minimum": 1 },
+        "min_panel_version": { "$ref": "#/$defs/semver" }
+      }
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "summary", "maintainer", "source_url", "requires", "permissions", "install"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$", "maxLength": 63 },
+        "title": { "$ref": "#/$defs/text" },
+        "summary": { "$ref": "#/$defs/text" },
+        "maintainer": { "$ref": "#/$defs/text" },
+        "source_url": { "$ref": "#/$defs/https_url" },
+        "docs_url": { "$ref": "#/$defs/https_url" },
+        "screenshots": { "type": "array", "items": { "$ref": "#/$defs/screenshot" } },
+        "requires": { "$ref": "#/$defs/requirements" },
+        "permissions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*:[a-z][a-z0-9_-]*$" }
+        },
+        "install": {
+          "oneOf": [
+            { "$ref": "#/$defs/swarm_service" },
+            { "$ref": "#/$defs/manual" }
+          ]
+        }
+      }
+    },
+    "swarm_service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "version", "image"],
+      "properties": {
+        "kind": { "const": "swarm_service" },
+        "version": { "$ref": "#/$defs/semver" },
+        "image": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]*(?::[0-9]+)?/(?:[a-z0-9]+(?:[._-]+[a-z0-9]+)*/)*[a-z0-9]+(?:[._-]+[a-z0-9]+)*@sha256:[a-f0-9]{64}$"
+        },
+        "port": { "type": "integer", "minimum": 1, "maximum": 65535, "default": 8080 },
+        "data_volume": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mount_path"],
+          "properties": {
+            "mount_path": { "type": "string", "pattern": "^/[A-Za-z0-9_][A-Za-z0-9_.-]*(?:/[A-Za-z0-9_][A-Za-z0-9_.-]*)*$" }
+          }
+        }
+      }
+    },
+    "manual": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "instructions_url"],
+      "properties": {
+        "kind": { "const": "manual" },
+        "instructions_url": { "$ref": "#/$defs/https_url" }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {
+      "id": "metrics",
+      "title": "Metrics",
+      "summary": "Historical CPU, memory, network, and disk I/O for Swarm services.",
+      "maintainer": "Modularnost",
+      "source_url": "https://github.com/modularnost/metrics_module",
+      "docs_url": "https://github.com/modularnost/metrics_module#readme",
+      "requires": {
+        "contract": 3
+      },
+      "permissions": ["stats:read"],
+      "install": {
+        "kind": "swarm_service",
+        "version": "0.4.0",
+        "image": "ghcr.io/modularnost/metrics-module@sha256:5ad2ee64fa1c76ac720162f914d16e595b23053ede126d39ac2e27c21a189c61",
+        "data_volume": {
+          "mount_path": "/data"
+        }
+      }
+    }
+  ]
+}
