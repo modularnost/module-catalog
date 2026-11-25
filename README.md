@@ -28,11 +28,36 @@ values. Keep a module's ID stable and match its Swarm module name.
   and keep the service pinned there so redeployments preserve the data.
 - `manual` supplies a public installation guide for a module with additional
   setup or dependencies.
+- `swarm_stack` supplies a version and a digest-pinned public module image
+  that contains a deployment bundle. The same format can be used by any module.
+
+### Deployment bundle
+
+An image for `swarm_stack` contains `/usr/share/modularnost/deploy/manifest.json`:
+
+```json
+{
+  "schema_version": 1,
+  "stack_files": ["stack.yml", "stack.dependencies.yml"],
+  "registry_credentials": true
+}
+```
+
+`stack_files` lists one or more Compose files in merge order. Paths are relative
+to the deployment directory. Additional assets live in that same directory.
+Use regular files and paths whose segments begin with a letter or digit and
+contain only letters, digits, periods, underscores, and hyphens. Keep the
+bundle to 64 files, 256 KiB per file, and a 1 MiB tar archive.
+
+Set `registry_credentials` when the stack requires the panel to manage
+encrypted registry credentials. The default is `false`. The panel can read
+and check the bundle during preflight without starting the module. Publish
+stack entries when the panel supports deploying them.
 
 ## Submit a module
 
-Open a PR updating `catalog.json`. Link to the public source and, for
-`swarm_service`, provide a publicly pullable image digest. Check that the
+Open a PR updating `catalog.json`. Link to the public source and provide a
+publicly pullable image digest for `swarm_service` and `swarm_stack`. Check that the
 version, contract, and permissions match the image's `/manifest`. Include any
 required storage or manual setup. Optional screenshots belong in
 `screenshots/<id>/` and each needs descriptive alt text.
