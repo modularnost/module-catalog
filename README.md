@@ -6,6 +6,7 @@ lists one approved version per installable module.
 
 | Module | What it does | Permissions | Installation |
 | --- | --- | --- | --- |
+| [Builder](https://github.com/modularnost/builder_module) | Builds and deploys applications from Git repositories | `service:read`, `service:create` | [Catalog setup](https://github.com/modularnost/panel/blob/main/docs/catalog.md#install-builder-from-the-catalog) |
 | [Metrics](https://github.com/modularnost/metrics_module) | Stores historical CPU, memory, network, and disk I/O for Swarm services | `stats:read` | [Installation guide](https://github.com/modularnost/metrics_module#install) |
 
 Catalog-based installation requires panel integration. To install Metrics now,

@@ -2,6 +2,23 @@
   "schema_version": 1,
   "modules": [
     {
+      "id": "builder",
+      "title": "Builder",
+      "summary": "Build and deploy applications from Git repositories with BuildKit.",
+      "maintainer": "Modularnost",
+      "source_url": "https://github.com/modularnost/builder_module",
+      "docs_url": "https://github.com/modularnost/panel/blob/main/docs/catalog.md#install-builder-from-the-catalog",
+      "requires": {
+        "contract": 3
+      },
+      "permissions": ["service:read", "service:create"],
+      "install": {
+        "kind": "swarm_stack",
+        "version": "0.1.0",
+        "image": "ghcr.io/modularnost/builder-module@sha256:a8ee6e755b892cbf8edfb82855980151ef7bacdd5c174e47ccc37ad5034cce9c"
+      }
+    },
+    {
       "id": "metrics",
       "title": "Metrics",
       "summary": "Historical CPU, memory, network, and disk I/O for Swarm services.",
