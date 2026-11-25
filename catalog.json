@@ -9,7 +9,8 @@
       "source_url": "https://github.com/modularnost/builder_module",
       "docs_url": "https://github.com/modularnost/panel/blob/main/docs/catalog.md#install-builder-from-the-catalog",
       "requires": {
-        "contract": 3
+        "contract": 3,
+        "min_panel_version": "0.11.0"
       },
       "permissions": ["service:read", "service:create"],
       "install": {
